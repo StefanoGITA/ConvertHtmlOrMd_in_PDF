@@ -2,9 +2,10 @@ from pathlib import Path
 from urllib.parse import urlparse
 import json
 
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
 from jinja2 import Template
 import markdown
+from pymdownx.superfences import fence_div_format
 
 
 def wrap_md_html_in_template(
@@ -24,7 +25,24 @@ def md_to_html(
         template_file = Path(__file__).parent / "config/template.html"
 
     template_str = Path(template_file).read_text(encoding="utf-8")
-    md_html = markdown.markdown(stream_data, extensions=["fenced_code", "tables", "toc"])
+    md_html = markdown.markdown(
+        stream_data,
+        extensions=["pymdownx.arithmatex", "pymdownx.superfences", "tables", "toc", "smarty"],
+        extension_configs={
+            "pymdownx.arithmatex": {
+                "generic": True,
+            },
+            "pymdownx.superfences": {
+                "custom_fences": [
+                    {
+                        "name": "mermaid",
+                        "class": "mermaid",
+                        "format": fence_div_format,
+                    }
+                ]
+            },
+        },
+    )
     return wrap_md_html_in_template(md_html, template_str=template_str, title=title)
 
 
@@ -52,6 +70,13 @@ def build_pdf(
             page.goto(html)
         else:
             page.set_content(html, wait_until="load")
+        try:
+            page.wait_for_function(
+                "document.documentElement.getAttribute('data-render-ready') === 'true'",
+                timeout=15000,
+            )
+        except PlaywrightTimeoutError:
+            pass
         pdf_bytes = page.pdf(format=page_format, print_background=True, margin=margin, scale=scale)
         browser.close()
     return pdf_bytes

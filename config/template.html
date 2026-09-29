@@ -61,10 +61,32 @@
     border-left: 3px solid #ccc;
     color: #555;
   }
+  .mermaid {
+    display: flex;
+    justify-content: center;
+    margin: 16px 0;
+  }
 </style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
     <title>{{title}}</title>
 </head>
 <body>
 {{ content }}
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: "\\(", right: "\\)", display: false},
+      {left: "\\[", right: "\\]", display: true}
+    ]
+  });
+
+  mermaid.initialize({startOnLoad: false});
+  mermaid.run({querySelector: ".mermaid"}).finally(() => {
+    document.documentElement.setAttribute("data-render-ready", "true");
+  });
+</script>
 </body>
 </html>

@@ -18,3 +18,5 @@ Usata come sorgente da un'altro script prevede 3 punti d'ingresso:
 
 ## Todo, spiegazione margins 
 [pdf_page_margins.json](config/pdf_page_margins.json)
+
+
