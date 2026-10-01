@@ -1,6 +1,6 @@
 [project]
 name = "ConvertHtmlOrMd_in_PDF"
-version = "1.0.1"
+version = "1.1.0"
 description = "This script can covert an html page, an html file or an markdown file in a pdf file, with a good page margin management"
 readme = "README.md"
 requires-python = ">=3.13"

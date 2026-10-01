@@ -11,6 +11,8 @@ When it uses from command line, it takes one mandatory argument, **source**, and
 
 `python main.py --help`
 
+To see an example of the output execute `python -m test.manual_check`
+
 When used as a library by another script, it exposes 4 entry points:
 - `html_to_pdf` - Creates a PDF file from a URL or from an HTML file
 - `md_to_pdf` - Creates a PDF file from a Markdown file
@@ -25,3 +27,10 @@ Formatting the PDF file correctly requires at least 3 parameters:
 
 The utility ships with default values, stored in the [pdf_page_settings.json](config/pdf_page_settings.json) file.
 You are free to edit that file or to pass a dictionary holding the expected keys with the values you want.
+
+## PyTest of the code
+Some tests are marked as slow. They launch a real Chromium instance via Playwright.
+
+- To run all test: `python -m pytest`
+- To escape **slow** tests: `uv run pytest -m "not slow"`
+- To execute only **slow** tests: `uv run pytest -m slow`
