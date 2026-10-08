@@ -1,12 +1,14 @@
-from pathlib import Path
-from urllib.parse import urlparse
 import json
 from dataclasses import dataclass
+from pathlib import Path
+from urllib.parse import urlparse
 
-from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
-from jinja2 import Template
 import markdown
+from jinja2 import Template
+from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
+from playwright.sync_api import sync_playwright
 from pymdownx.superfences import fence_div_format
+
 
 @dataclass
 class PdfPageSettings:
@@ -70,7 +72,7 @@ def build_pdf(
     with sync_playwright() as p:
         browser = p.chromium.launch()
         page = browser.new_page()
-        if html.startswith('http://') or html.startswith('https://'):
+        if html.startswith(('http://', 'https://')):
             page.goto(html)
         else:
             page.set_content(html, wait_until="load")
@@ -126,7 +128,7 @@ def main(
         output_file: str | None = None,
         pdf_page_settings: dict[str, str] | None = None,
 ) -> None:
-    if source_url_file.startswith('http://') or source_url_file.startswith('https://'):
+    if source_url_file.startswith(('http://', 'https://')):
         # Input is an url
         if not output_file:
             parsed = urlparse(source_url_file)
@@ -154,8 +156,9 @@ def main(
 
 
 if __name__ == "__main__":
-    import typer
     from typing import Annotated
+
+    import typer
 
     def cli(
             source: Annotated[

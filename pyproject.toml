@@ -1,6 +1,6 @@
 [project]
 name = "ConvertHtmlOrMd_in_PDF"
-version = "1.1.0"
+version = "1.1.1"
 description = "This script can covert an html page, an html file or an markdown file in a pdf file, with a good page margin management"
 readme = "README.md"
 requires-python = ">=3.13"
@@ -13,11 +13,12 @@ dependencies = [
     "markdown>=3.10.3",
     "playwright>=1.63.0",
     "pymdown-extensions>=12.1",
-    "typer>=0.27.2",
+    "typer==0.27.3",
 ]
 
 [dependency-groups]
 dev = [
+    "ruff>=0.16.10",
     "pytest>=9.1.1",
 ]
 
@@ -27,3 +28,9 @@ testpaths = ["test"]
 markers = [
     "slow: tests that launch a real Chromium browser via playwright",
 ]
+
+[tool.ruff]
+target-version = "py313"
+
+# Lunghezza massima della riga
+line-length = 120
